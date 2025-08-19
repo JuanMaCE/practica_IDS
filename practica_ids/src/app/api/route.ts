@@ -1,8 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
-
 import postgres from "postgres";
-
-
 
 export async function POST(request : NextRequest) {
     const data = await request.json();
@@ -23,12 +20,23 @@ export async function POST(request : NextRequest) {
         );
     } 
 
+    try {
+        const response = await INSERT(title, description, author);
+        return response;
+    } catch (error) {
+        console.error("No se pudo crear el POST", error);
+        return NextResponse.json(
+            { error: "Error al crear el POST" },
+            { status: 500 }
+        );
+    }
+}
+
+async function INSERT(title: string, description: string, author: string) {
     const conectionstring = 
     "postgresql://postgres.hbfzoamdaczqdsihenhk:IDS120365_FER@aws-1-us-east-2.pooler.supabase.com:6543/postgres";
     const sql = postgres(conectionstring);
-
-    try {
-        await sql`INSERT INTO "POST" (title, description, author)
+    await sql`INSERT INTO "POST" (title, description, author)
         VALUES (${title}, ${description}, ${author})
         `;
         return NextResponse.json(
@@ -39,12 +47,4 @@ export async function POST(request : NextRequest) {
          },
         { status: 200 }
         );
-    
-    } catch (error) {
-        console.error("No se pudo crear el POST", error);
-        return NextResponse.json(
-            { error: "Error al crear el POST" },
-            { status: 500 }
-        );
-    }
 }
