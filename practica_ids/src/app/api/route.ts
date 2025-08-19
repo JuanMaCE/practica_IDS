@@ -1,5 +1,8 @@
 import { NextResponse, NextRequest } from "next/server";
+
 import postgres from "postgres";
+
+
 
 export async function POST(request : NextRequest) {
     const data = await request.json();
@@ -21,7 +24,7 @@ export async function POST(request : NextRequest) {
     } 
 
     const conectionstring = 
-    "postgresql://postgres.hbfzoamdaczqdsihenhk:[YOUR-PASSWORD]@aws-1-us-east-2.pooler.supabase.com:6543/postgres";
+    "postgresql://postgres.hbfzoamdaczqdsihenhk:IDS120365_FER@aws-1-us-east-2.pooler.supabase.com:6543/postgres";
     const sql = postgres(conectionstring);
 
     try {
