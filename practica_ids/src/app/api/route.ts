@@ -1,11 +1,13 @@
 import { NextResponse, NextRequest } from "next/server";
 import Insert from "@/app/utils/insertar";
 import RegisterLibro from "../utils/libro-valid";
-import showlibro from "../utils/libro-shows";
+import ShowLibro from "../utils/libro-shows";
 import Show from "../utils/mostrar";
 import Eliminar from "../utils/eliminar";
-import EliminarLibro
- from "../utils/libro-delete";
+import EliminarLibro from "../utils/libro-delete";
+import Editar from "../utils/editar";
+import EditarLibro from "../utils/editar-libro";
+
 export async function POST(request : NextRequest) {
     const data = await request.json();
     const { title, description, author } = data;
@@ -33,7 +35,7 @@ export async function POST(request : NextRequest) {
 
 export async function GET() {
   try {
-    const a = await new showlibro(new Show()).mostrar();
+    const a = await new ShowLibro(new Show()).mostrar();
 
     return NextResponse.json(
       {
@@ -63,5 +65,20 @@ export async function DELETE(request: NextRequest) {
   } catch (error) {
     console.error("No se pudo eliminar el POST", error);
     return NextResponse.json({ error: "Error al eliminar el POST" }, { status: 500 });
+  }
+}
+
+export async function PUT(request: NextRequest) {
+  const { id, title, description, author } = await request.json();
+
+  try {
+    const result = await new EditarLibro(new Editar()).editar(id, title, description, author);
+    if (result.length === 0) {
+      return NextResponse.json({ error: "Post no encontrado" }, { status: 404 });
+    }
+    return NextResponse.json({ message: "Post actualizado", post: result[0] }, { status: 200 });
+  } catch (error) {
+    console.error("No se pudo editar el POST", error);
+    return NextResponse.json({ error: "Error al editar el POST" }, { status: 500 });
   }
 }

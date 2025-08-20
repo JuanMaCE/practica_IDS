@@ -1,6 +1,9 @@
 import postgres from "postgres";
 
-export default class Eliminar {
+
+
+
+export default class Editar {
   private sql;
 
   constructor() {
@@ -8,12 +11,13 @@ export default class Eliminar {
     this.sql = postgres(connectionString);
   }
 
-  public async DELETE(id: number) {
+  public async UPDATE(id: number, title: string, description: string, author: string) {
     const result = await this.sql`
-      DELETE FROM "POST"
+      UPDATE "POST"
+      SET title = ${title}, description = ${description}, author = ${author}
       WHERE id = ${id}
       RETURNING *
     `;
-    return result; // devolvemos el post eliminado o []
+    return result; // devolvemos el post actualizado o []
   }
 }
