@@ -1,3 +1,8 @@
+import { NextResponse } from "next/server";
+
+
+
+
 export default class Title{
     public value: string;
 
@@ -5,11 +10,9 @@ export default class Title{
         this.isValid(value);
         this.value = value;
     }
-
-    public isValid(value: string): boolean {
-        if (typeof value !== 'string') {
-            return false;
+    public isValid(value: string): void {
+        if (typeof value !== 'string' || value.length > 2) {
+            throw new Error("El título debe ser una cadena de texto");
         }
-        return true
     }
 }
